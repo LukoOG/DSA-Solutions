@@ -1,0 +1,12 @@
+# Rust
+target/
+
+# Python
+__pycache__/
+*.pyc
+
+# Node / TS
+node_modules/
+
+# OS
+.DS_Store
