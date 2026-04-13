@@ -13,7 +13,7 @@ class Solution:
             elif (divisible_by_5):
                 results.append("Buzz")
             else:
-                results.append(i)
+                results.append(str(i))
         return results
     
 if __name__ == "__main__":

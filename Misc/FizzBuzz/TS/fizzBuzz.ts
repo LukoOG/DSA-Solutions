@@ -12,7 +12,7 @@ function fizzBuzz(n: number){
         } else if(divisibleBy5) {
             results.push("Buzz")
         } else{
-            results.push(i)
+            results.push(i.toString())
         }
     }
 
