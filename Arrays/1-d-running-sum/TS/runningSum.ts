@@ -1,4 +1,5 @@
-// runningSum.ts
+export {}
+
 function runningSum1(nums: number[]): number[] {
     const result: number[] = [];
     
