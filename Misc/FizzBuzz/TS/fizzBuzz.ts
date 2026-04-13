@@ -1,4 +1,4 @@
-function fizzBuzz(n: number){
+function fizzBuzz(n: number): string[]{
     let results = [];
 
     for(let i = 1; i <= n; i++){
