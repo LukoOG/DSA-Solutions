@@ -33,7 +33,8 @@ fn richest_customer(accounts: Vec<Vec<i32>>) -> i32 {
 }
 
 //This is a more concise version from GPT--again
-fn richest_customerGPT(accounts: Vec<Vec<i32>>) -> i32 {
+#[allow(unused)]
+fn richest_customer_gpt(accounts: Vec<Vec<i32>>) -> i32 {
     accounts
         .iter()
         .map(|acc| acc.iter().sum::<i32>())
