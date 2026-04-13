@@ -8,11 +8,23 @@ fn main() {
     }
 }
 
-fn fizzbuzz(n: i32){
+fn fizzbuzz(n: i32) -> Vec<String>{
+    let mut results: Vec<String> = Vec::new();
+   
     for i in 1..=n{
-        divisible_by_3 = i % 3 == 3;
-        divisible_by_5 = i % 5 == 5;
+        let divisible_by_3 = i % 3 == 0;
+        let divisible_by_5 = i % 5 == 0;
 
-        if divisible
-    }
+        if divisible_by_3 && divisible_by_5{
+            results.push("FizzBuzz".to_string())
+        } else if divisible_by_3 {
+            results.push("Fizz".to_string())
+        } else if divisible_by_5 {
+            results.push("Buzz".to_string())
+        } else {
+            results.push(i.to_string());
+        }
+    };
+
+    results
 }
