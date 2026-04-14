@@ -19,7 +19,7 @@ Output: [1, 3, 6, 10]
 ## Approaches
 
 ### Solution 1 — New Array
-Build a separate result array. Preserves the original input.
+I build a separate result array, preserving the original input.
 
 - **Time:** O(n)
 - **Space:** O(n)
@@ -46,7 +46,7 @@ Overwrite the input array directly. More space-efficient.
 
 **Python**
 ```bash
-python running_sum.py
+python3 running_sum.py
 ```
 
 **Rust**

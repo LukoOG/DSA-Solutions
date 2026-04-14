@@ -15,7 +15,7 @@ class Solution:
             magazine_map[letter] = 1 + magazine_map.get(letter, 0)
             
         for letter in ransom_note:
-            if magazine_map.get(letter) == 0 or magazine_map.get(letter) == None:
+            if magazine_map.get(letter, 0) == 0:
                 print(magazine_map)
                 return False
             else:
