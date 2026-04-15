@@ -56,6 +56,7 @@ function closestTarget(words, target, startIndex):
         yield min(steps_1, steps_2)
 
     return min(distances)
+```
 
 - **Time:** O(n)
 - **Space:** O(1)
