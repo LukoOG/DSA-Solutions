@@ -1,3 +1,6 @@
+from typing import List
+
+
 def minimum_dist(targetidx: int, startidx: int, length: int)->int:
     return min(abs(targetidx - startidx), length - abs(startidx - targetidx))
 
