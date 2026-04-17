@@ -1,3 +1,5 @@
+from typing import List
+
 def reverse(num: int) -> int:
     st = str(num)
     reverse_st = st[::-1]
