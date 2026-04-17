@@ -6,7 +6,7 @@ def reverse(num: int) -> int:
 #Loop through and immediately check a hasmap for valid reverses; update the map as
 #you loop
 #map is lazy so it wasn't running when it was unused
-class Solution:
+class Solution_before:
     def minMirrorPairDistance(self, nums: List[int]) -> int:
         nums_map = {}
         min_d_array: list[int] = []
@@ -25,6 +25,19 @@ class Solution:
         else:
             min_d = -1 if not min_d_array else min(min_d_array)
             return min_d
+        
+class Solution_final:
+    def minMirrorPairDistance(self, nums: List[int]) -> int:
+        nums_map = {}
+        min_dist = float('inf')
+        for idx, num in enumerate(nums):
+            rev = reverse(num)
+            if num in nums_map:
+                idxs = nums_map.get(num)
+                dist = idx - idxs
+                min_dist = min(min_dist, dist)
+            nums_map[rev] = idx
+        return min_dist if min_dist != float('inf') else -1
         
 
                     
@@ -48,7 +61,7 @@ if __name__ == "__main__":
 
     for nums in test_cases:
         print(f"Input:       {nums}")
-        print(f"Output:      {Solution().minMirrorPairDistance(nums)}")
+        print(f"Output:      {Solution_final().minMirrorPairDistance(nums)}")
         print("-" * 35)
     # n = 6
     # print(f"Input:       {test_cases[n]}")
