@@ -6,7 +6,7 @@
 
 - [ ] Finish closest element queries (LeetCode 3488)
   - [ ] Python
-  - [ ] TypeScript
+  - [x] TypeScript
   - [ ] Rust
   - Notes: Needs optimization (currently O(n^2))
 
