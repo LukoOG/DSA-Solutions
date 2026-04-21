@@ -1,7 +1,19 @@
 export {}
 
-function maxDistance(){
-    
+function maxDistance(nums1: number[], nums2: number[]): number {
+    let [n, m] = [nums1.length, nums2.length];
+    let [i, j] = [0,0]
+    let maxDist = 0;
+    while(i < n && j < m){
+        if(nums1[i] <= nums2[j]){
+            maxDist = Math.max(maxDist, j - i)
+            j++
+        } else if(nums1[i] > nums2[j]){
+            i++
+        };
+    };
+
+    return maxDist
 }
 
 const testCases: [number[], number[]][] = [

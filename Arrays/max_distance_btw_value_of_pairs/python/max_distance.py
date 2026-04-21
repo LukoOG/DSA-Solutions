@@ -4,17 +4,18 @@ from typing import List
 class Solution:
     @staticmethod
     def maxDistance(nums1: List[int], nums2: List[int]) -> int:
-        n = len(nums1)
-        m = len(nums2)
-        #If i less than equal to j...keep moving j forward till nums2[j] > nums1[i]
-        #If nums2[j] > nums1[i], then move i forward
+        #If i less than or equal to j...keep moving j forward till nums1[i] <= nums2[j]
+        #else move i forward
+        n, m = len(nums1), len(nums2)
+        max_dist = 0
         i = 0
         j = 0
-        max_dist = 0
         while (i < n and j < m):
-            print("values of i and j", i, j, nums1[i] ,nums2[j])
+            # print("values of i and j", i, j, nums1[i] ,nums2[j])
             if i > j:
                 j = i
+                if j >= m:
+                    break
             if nums1[i] <= nums2[j]:
                 max_dist = max(max_dist, j - i)
                 j += 1
