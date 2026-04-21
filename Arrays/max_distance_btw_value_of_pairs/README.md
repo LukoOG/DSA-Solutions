@@ -21,6 +21,7 @@ Output: 2
 Since both arrays are non-increasing and `i` must be less than or equal to `j`, we can use two pointers starting at the beginning of each array. Keep advancing `j` as long as the pair is valid. When `nums1[i] > nums2[j]` is hit, advance `i` to find a smaller value that satisfies the constraint of nums1[i] <= nums2[j] again. Track the maximum `j - i` seen throughout.
 
 ### Pseudocode
+```
 function maxDistance(nums1, nums2):
 i = 0, j = 0
 max_dist = 0
@@ -30,6 +31,7 @@ while i< len(nums1) and j < len(nums2):
         j++
     else:
         i++
+```
 
 return max_dist
 
