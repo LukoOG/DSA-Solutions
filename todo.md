@@ -10,10 +10,11 @@
   - [ ] Rust
   - Notes: Needs optimization (currently O(n^2))
 
-- [ ] Finish Maximum Distance between 2 value pairs (LeetCode 1855)
-  - [x] Python
+
+- [ ] Finish Two Furthest Houses (Leetcode 2078)
+  - [ ] Python
   - [ ] TypeScript
   - [ ] Rust
-  - [ ] ReadMe
-
+  - [ ] README
+  
 - [ ] Produce README and Testcases for Mirror Distance of an integer

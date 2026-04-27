@@ -21,11 +21,11 @@ function solveQueries(nums: number[], queries: number[]): number[] {
     //Binary search
 
     let [start, end] = [0, indices.length - 1];
-    let middle = (start + end) >> 1; //floor division
+    let middle: number;
     let indice_neighbors = [];
 
     while (start <= end) {
-      middle = (start + end) >> 1;
+      middle = (start + end) >> 1; //floor division
       if (indices[middle] == j) {
         const left_idx = (indices.length + middle - 1) % indices.length;
         const right_idx = (middle + 1) % indices.length;
