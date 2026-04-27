@@ -13,7 +13,7 @@
 
 - [ ] Finish Two Furthest Houses (Leetcode 2078)
   - [ ] Python
-  - [ ] TypeScript
+  - [x] TypeScript
   - [ ] Rust
   - [ ] README
   

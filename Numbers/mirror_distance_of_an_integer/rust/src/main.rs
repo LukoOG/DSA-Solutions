@@ -1,7 +1,13 @@
 struct Solution();
 
 fn main() {
-    println!("Hello, world!");
+    let test_cases = vec![25, 10, 7, 121, 100, 1];
+
+    for n in test_cases {
+        println!("Input:       {}", n);
+        println!("Output:      {}", Solution::mirror_distance(n));
+        println!("{}", "-".repeat(35));
+    }
 }
 
 impl Solution {

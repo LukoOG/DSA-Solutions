@@ -1,3 +1,5 @@
+export {};
+
 function mirrorDistance(n: number): number {
     let number = n;
     let reverseNumber = 0;
@@ -7,3 +9,11 @@ function mirrorDistance(n: number): number {
     }
     return Math.abs(number - reverseNumber)
 };
+
+const testCases: number[] = [25, 10, 7, 121, 100, 1];
+
+for (const n of testCases) {
+    console.log(`Input:       ${n}`);
+    console.log(`Output:      ${mirrorDistance(n)}`);
+    console.log("-".repeat(35));
+}
