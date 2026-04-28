@@ -16,5 +16,17 @@
   - [x] TypeScript
   - [ ] Rust
   - [ ] README
+
+- [ ] Add solutions to two sum (Leetcode 13?)
+  - [ ] Python
+  - [ ] TypeScript
+  - [ ] Rust
+  - [ ] README
+
+- [ ] Add solutions to palindrom number (Leetcode 13?)
+  - [ ] Python
+  - [ ] TypeScript
+  - [ ] Rust
+  - [ ] README
   
 - [ ] Produce README and Testcases for Mirror Distance of an integer
