@@ -1,7 +1,16 @@
+from typing import List
+import copy as c
+
 class Solution:
-    @staticmethod
     def rotate(self, matrix: List[List[int]]) -> None:
-        return 
+        n = len(matrix)-1
+        copy = c.deepcopy(matrix)
+        
+        for index, _ in enumerate(copy):
+            new_row = []
+            for i in range(n, -1, -1):
+                new_row.append(copy[i][index])
+            matrix[index] = new_row
 
 if __name__ == "__main__":
     test_cases = [

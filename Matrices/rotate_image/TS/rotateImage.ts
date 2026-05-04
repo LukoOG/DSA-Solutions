@@ -7,13 +7,12 @@ function rotate(matrix: number[][]): void {
   let lastRow: number[] = [];
   const copy = matrix.map(r => [...r]);
 
-  copy.forEach((row, r) => {
+  copy.forEach((_, r) => {
     let newRow: number[] = [];
     for (let i = n; i >= 0; i--) {
         newRow.push(copy[i][r]);
     }
     matrix[r] = newRow;
-    return row;
   });
 }
 
@@ -39,17 +38,10 @@ const testCases: number[][][] = [
   ],
 ];
 
-// for (const matrix of testCases) {
-//   const original = matrix.map((row) => [...row]);
-//   rotate(matrix);
-//   console.log(`Input:       ${JSON.stringify(original)}`);
-//   console.log(`Output:      ${JSON.stringify(matrix)}`);
-//   console.log("-".repeat(35));
-// }
-
-const test = testCases[1]
-const original = test.map((row) => [...row]);
-rotate(test);
-console.log(`Input:       ${JSON.stringify(original)}`);
-console.log(`Output:      ${JSON.stringify(test)}`);
-console.log("-".repeat(35));
+for (const matrix of testCases) {
+  const original = matrix.map((row) => [...row]);
+  rotate(matrix);
+  console.log(`Input:       ${JSON.stringify(original)}`);
+  console.log(`Output:      ${JSON.stringify(matrix)}`);
+  console.log("-".repeat(35));
+}
