@@ -2,7 +2,21 @@ from typing import List
 
 class Solution:
     def maxArea(self, tank: List[int]) -> int:
-        return 2
+        left: int = 0
+        right: int = len(tank) - 1
+        maxArea: int = 0
+        
+        while left < right:
+            wall: int = min(tank[left], tank[right])
+            distance: int = right - left
+            
+            currentArea = wall * distance
+            maxArea = max(maxArea, currentArea)
+            if tank[left] < tank[right]:
+                left+=1
+            else:
+                right-=1
+        return maxArea
 
 
 if __name__ == "__main__":
