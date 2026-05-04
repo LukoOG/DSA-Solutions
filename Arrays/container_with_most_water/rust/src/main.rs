@@ -21,7 +21,7 @@ impl Solution {
     fn max_area(tank: Vec<i32>) -> i32 {
         let mut max_area = i32::MIN;
         let mut left = 0;
-        let mut right = (tank.len() - 1);
+        let mut right = tank.len() - 1;
 
         while left < right {
             if tank[left] < tank[right] {
