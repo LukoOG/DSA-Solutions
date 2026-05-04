@@ -28,6 +28,17 @@ fn main() {
 
 impl Solution{
     fn rotate(matrix: &mut Vec<Vec<i32>>){
+        let copy = matrix.clone();
+        let n = matrix.len()-1;
 
+        for (r, _) in copy.iter().enumerate(){
+            let mut new_row: Vec<i32> = Vec::new();
+            for j in (0..=n).rev(){
+                let value = copy[j][r];
+                new_row.push(value)
+            }
+
+            matrix[r] = new_row;
+        }
     }
 }
