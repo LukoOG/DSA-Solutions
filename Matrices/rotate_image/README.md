@@ -23,6 +23,7 @@ After drafting the pattern on paper, I noticed that each row `r` in the rotated 
 To avoid overwriting values that are still needed during the transformation, a deep copy of the original matrix is made first. Each row in the result is then built by iterating the corresponding column of the copy decrementally from `n-1` to `0`.
 
 ### Pseudocode
+```
 function rotate(matrix):
 n = length of matrix - 1
 copy = deep copy of matrix
@@ -31,6 +32,7 @@ for each row r in copy:
     for i from n down to 0:
         newRow.push(copy[i][r])
     matrix[r] = newRow
+```
 
 - **Time:** O(n²)
 - **Space:** O(n²) — due to the copy
