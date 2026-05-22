@@ -21,4 +21,3 @@ if __name__ == "__main__":
         print(f"Input:       {nums}")
         print(f"Output:      {Solution().separateDigits(nums)}")
         print("-" * 35)
-    print(str(99).split())

@@ -9,15 +9,17 @@ function separateDigits(nums: number[]): number[] {
   return results;
 }
 
-const test_cases = [
-  [13, 25, 32], // → [1, 3, 2, 5, 3, 2]
-  [7, 1, 3, 9], // → [7, 1, 3, 9], all single digits
-  [100, 200], // → [1, 0, 0, 2, 0, 0], zeros in digits
-  [99, 77], // → [9, 9, 7, 7]
-  [1], // → [1], single element
+
+const testCases: number[][] = [
+    [13, 25, 32],
+    [7, 1, 3, 9],
+    [100, 200],
+    [99, 77],
+    [1],
 ];
 
-
-for(const test of test_cases){
-    console.log(separateDigits(test))
+for (const nums of testCases) {
+    console.log(`Input:       ${JSON.stringify(nums)}`);
+    console.log(`Output:      ${JSON.stringify(separateDigits(nums))}`);
+    console.log("-".repeat(35));
 }
