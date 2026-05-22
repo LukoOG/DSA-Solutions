@@ -28,11 +28,6 @@
   - [ ] TypeScript
   - [ ] Rust
   - [ ] README
-  
-- [ ] Produce README and Testcases for Mirror Distance of an integer
-
-- [ ] Add Pseudocode to README of
-  - [ ] richest customer
 
 - [ ] Add Solution to check if Array is good leetcode 2784
   - [ ] Python

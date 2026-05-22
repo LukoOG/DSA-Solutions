@@ -23,6 +23,22 @@ I iterate through each customer's accounts, sum their wealth, and track the maxi
 - **Time:** O(m × n)
 - **Space:** O(1)
 
+## Pseudocode
+
+```text
+set richest = 0
+
+for each customer in accounts:
+    set wealth = 0
+
+    for each bank_balance in customer:
+        wealth += bank_balance
+
+    richest = max(richest, wealth)
+
+return richest
+```
+
 ---
 
 ## Implementations
