@@ -21,6 +21,7 @@ Output: [0, 1]
 For each number, compute its difference from the target and check if that difference already exists in the map. If it does, the complement was seen earlier and its stored index pairs with the current index to form the answer. If not, store the current number mapped to its index and continue.
 
 ### Pseudocode
+```
 function twoSum(nums, target):
 difference_map = {}
 for idx, num in nums:
@@ -32,6 +33,7 @@ for idx, num in nums:
     difference_map[num] = idx
 
 return -1
+```
 
 - **Time:** O(n)
 - **Space:** O(n)
