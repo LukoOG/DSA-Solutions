@@ -1,11 +1,6 @@
 export {};
 
-function earliestFinishTime(
-  landStartTime: number[],
-  landDuration: number[],
-  waterStartTime: number[],
-  waterDuration: number[],
-): number {
+function earliestFinishTime(landStartTime: number[],landDuration: number[],waterStartTime: number[],waterDuration: number[],): number {
   //land order
   let minLandOrder = Infinity;
   for (let i = 0; i < landStartTime.length; i++) {
