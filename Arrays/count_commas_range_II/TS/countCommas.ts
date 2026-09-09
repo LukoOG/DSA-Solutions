@@ -1,7 +1,22 @@
 export {}
 
 function countCommas(n: number): number {
-    return n // 10
+    let m  = n;
+    let highestPower = 0;
+    while(n > 999){
+        n = Math.floor(n / 1000)
+        highestPower++
+    };
+    let previousNoCommas = 0;
+    for(let i = 0; i < highestPower; i++){
+        let noOfInts = 999 * Math.pow(1000, i);
+        previousNoCommas += noOfInts * i;
+    };
+    let partialIntegers = m+1 - Math.pow(1000, highestPower);
+    let partialNoOfCommas = partialIntegers * highestPower;
+
+
+    return partialNoOfCommas + previousNoCommas
 }
 
 const testCases: number[] = [
