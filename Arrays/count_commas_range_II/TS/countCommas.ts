@@ -1,7 +1,7 @@
 export {}
 
 function countCommas(n: number): number {
-    return 0
+    return n // 10
 }
 
 const testCases: number[] = [
