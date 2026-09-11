@@ -1,18 +1,22 @@
 class Solution:        
     def totalNumbers(self, digits: list[int])->int:
-        scope = []
+        seen = [False] * 1000
         r = range(0,len(digits))
-        n = 0
+        count = 0
         for i in r:
+            if digits[i] == 0:
+                continue
             for j in r:
                 if j == i:
                     continue
                 for k in r:
                     if k == j or k == i:
                         continue
-                    digit = digits[i] * 100 + digits[j] * 10 + digits[k] 
-                    scope.append(digit)
-        return sum(1 for x in set(scope) if x // 100 and x % 2==0)
+                    digit = digits[i] * 100 + digits[j] * 10 + digits[k]
+                    if digit % 2 == 0 and not seen[digit]:
+                        seen[digit] = True
+                        count+=1
+        return count
     
     
 if __name__ == "__main__":
