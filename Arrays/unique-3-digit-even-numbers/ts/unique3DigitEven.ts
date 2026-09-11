@@ -5,13 +5,16 @@ function totalNumbers(digits: number[]): number {
   let vis = Array.from({ length: 1000 }, () => false);
   let count = 0;
   for (let i = 0; i <= digits.length; i++) {
+    if (digits[i] == 0) {
+      continue;
+    }
     for (let j = 0; j <= digits.length; j++) {
       for (let k = 0; k <= digits.length; k++) {
         if (i == j || i == k || k == j) {
           continue;
         }
         let digit = digits[i] * 100 + digits[j] * 10 + digits[k];
-        if (digit % 2 == 0 && Math.floor(digit / 100) > 0 && !vis[digit]) {
+        if (digit % 2 == 0 && !vis[digit]) {
           vis[digit] = true;
           count++;
           // unique.add(digit)

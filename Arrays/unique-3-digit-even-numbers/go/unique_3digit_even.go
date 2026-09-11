@@ -18,6 +18,9 @@ func totalNumbers(digits []int) int {
 	count := 0
 	vis := make([]bool, 1000)
 	for i := range digits {
+		if digits[i] == 0 {
+			continue
+		}
 		for j := range digits {
 			for k := range digits {
 				if i == j || i == k || k == j {
@@ -25,7 +28,7 @@ func totalNumbers(digits []int) int {
 				}
 				digit := digits[i]*100 + digits[j]*10 + digits[k]
 				//I previously used Contains on a separate slice to check if already seen
-				if digit%2 == 0 && digit/100 > 0 && !vis[digit] {
+				if digit%2 == 0 && !vis[digit] {
 					vis[digit] = true
 					count++
 				}

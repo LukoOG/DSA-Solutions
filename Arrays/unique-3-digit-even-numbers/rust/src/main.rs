@@ -22,13 +22,16 @@ impl Solution {
         let mut count = 0;
         let mut vis = [false; 1000];
         for i in 0..digits.len(){
+            if digits[i as usize] == 0 {
+                continue
+            }
             for j in 0..digits.len(){
                 for k in 0..digits.len(){
                     if i == j || i == k || k == j {
                         continue;
                     }
                     let digit = digits[i] * 100 + digits[j] * 10 + digits[k];
-                    if digit % 2 == 0 && digit / 100 > 0 && !vis[digit as usize]{
+                    if digit % 2 == 0 && !vis[digit as usize]{
                         vis[digit as usize] = true;
                         count+=1
                     }
