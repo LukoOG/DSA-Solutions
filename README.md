@@ -5,17 +5,18 @@ This repository documents my journey solving Data Structures and Algorithms (DSA
 * 🐍 Python
 * 🟨 TypeScript
 * 🦀 Rust
+* 🔵 Go - Sept, 2026
 
-The goal is not just to solve problems, but to deeply understand how different languages approach the same concepts.
+My goal isn't just to solve problems, but to understand how different languages approach the same concepts while getting accoustumed to their syntax.
 
 ---
 
 ## 🎯 Objectives
 
-* Strengthen problem-solving and algorithmic thinking
+* Strengthen my problem-solving and algorithmic thinking skill
 * Compare language paradigms and trade-offs
-* Build fluency across Python, TypeScript, and Rust
-* Write clean, efficient, and idiomatic code in each language
+* Build fluency across Python, TypeScript, Rust and Go
+* Learn to write clean, efficient, and idiomatic code in each language
 
 ---
 
@@ -31,6 +32,9 @@ problem-name/
 │   └── solution.ts
 ├── rust/
 │   └── (Cargo project)
+├── go/
+|    └── solution.go
+|
 └── README.md
 ```
 
@@ -39,16 +43,13 @@ problem-name/
 
 ---
 
-## ⚖️ Language Perspectives
+## ⚖️ My Language Perspectives
 
 | Language   | Focus                       |
 | ---------- | --------------------------- |
 | Python     | Simplicity & speed          |
 | TypeScript | Type safety & structure     |
 | Rust       | Performance & memory safety |
-
-## 📈 Ongoing Progress
-
-This is a continuous learning project. More problems and optimizations will be added over time.
+| Go         | Also Performance & memory safety |
 
 ---
