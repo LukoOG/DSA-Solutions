@@ -22,7 +22,7 @@ Output: true
 
 An early length check short-circuits the comparison immediately for strings of different sizes.
 
-For Python, TypeScript, and Go, a single frequency array of size 26 is used. Both strings are iterated simultaneously using zip — incrementing the count for each character in `s` and decrementing for each character in `t`. If the strings are anagrams, every increment is cancelled by a corresponding decrement, leaving all zeros. The array is compared against a zero-filled target at the end.
+I used a single frequency array of 26 for Python, Ts and Go. Both strings are iterated simultaneously using zip — incrementing the count for each character in `s` and decrementing for each character in `t`. If the strings are anagrams, every increment is cancelled by a corresponding decrement, leaving all zeros. The array is compared against a zero-filled target at the end.
 
 For Rust, each string is folded into a `HashMap` mapping bytes to their frequency counts. The two maps are then compared directly using Rust's derived `PartialEq` on `HashMap`. A separate frequency array approach would also work in Rust, but the HashMap fold is idiomatic and performance is already optimal.
 
