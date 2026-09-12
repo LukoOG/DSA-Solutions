@@ -32,8 +32,32 @@ function linkedListToArray(node: ListNode | null): number[] {
 //
 
 function rotateRight(head: ListNode | null, k: number): ListNode | null {
-    
-    return null
+    if(k == 0 || head == null || head.next == null){
+        return head
+    };
+
+    let length = 1;
+    let tail = head;
+    while(tail.next){
+        tail = tail.next
+        length++
+    };
+
+    k = k % length;
+    if(k == 0) return head;
+    tail.next = head;
+    let newTailPos = length - k -1;
+    // for(let i = 0; i < newTailPost; i++){
+    //     head = head?.next;
+    // }
+    while(newTailPos > 0){
+        head = head?.next
+        newTailPos--
+    };
+
+    const newHead = head?.next;
+    head.next = null;
+    return newHead
 }
 
 const testCases: [number[], number][] = [

@@ -23,9 +23,30 @@ def linked_list_to_array(node: Optional[ListNode]) -> list[int]:
     return result
 
 class Solution:
+    @staticmethod
     def rotateRight(head: Optional[ListNode], k: int)->Optional[ListNode]:
+        if not head or not head.next or k == 0:
+            return head
+        #track the length and reach tail of list
+        tail = head
+        length = 1
+        while tail.next:
+            tail = tail.next
+            length +=1
+        k = k % length
+        if k == 0:
+            return head
+        tail.next = head
         
-        return
+        new_tail_pos = length - k - 1
+        #move head to new tail
+        for _ in range(0,new_tail_pos):
+            head = head.next
+        
+        new_head = head.next
+        head.next = None
+        return new_head
+        
 
 if __name__ == "__main__":
     test_cases = [
