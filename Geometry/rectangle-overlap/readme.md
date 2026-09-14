@@ -18,14 +18,28 @@ Output: true
 
 ---
 
-## Approach
+## Approach — Edge Comparison (Negated Non-Overlap)
 
-*// your explanation here*
+Two rectangles do NOT overlap if one is completely to the left, right, above, or below the other. These four non-overlap conditions are:
+
+rec1 is left of rec2: rec1[2] <= rec2[0]
+rec1 is right of rec2: rec1[0] >= rec2[2]
+rec1 is below rec2: rec1[3] <= rec2[1]
+rec1 is above rec2: rec1[1] >= rec2[3]
+
+
+Rather than checking for overlap directly, the solution checks if any of these non-overlap conditions hold and negates the result. Strict inequalities (`<=`, `>=`) correctly exclude the touching-edge case since edges touching is not considered an overlap.
 
 ### Pseudocode
+```
+function isRectangleOverlap(rec1, rec2):
+    left_of = rec1[2] <= rec2[0]
+    right_of = rec1[0] >= rec2[2]
+    below = rec1[3] <= rec2[1]
+    above = rec1[1] >= rec2[3]
 
-// your pseudocode here
-
+    return NOT (left_of OR right_of OR below OR above)
+```
 
 - **Time:** O(1)
 - **Space:** O(1)
