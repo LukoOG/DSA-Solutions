@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, println};
 
 struct Solution();
 
@@ -26,9 +26,8 @@ impl Solution {
     fn can_construct(ransom_note: String, magazine: String) -> bool {
         let mut magazine_map: HashMap<u8, i32> = HashMap::new();
 
-        for (_i, item) in magazine.as_bytes().iter().enumerate() {
-            let value = magazine_map.get(&item).copied().unwrap_or_default();
-            magazine_map.insert(*item, value + 1);
+        for (_i, &item) in magazine.as_bytes().iter().enumerate() {
+            magazine_map.entry(item).and_modify(|val| *val+=1).or_insert(1);
         }
 
         for char in ransom_note.as_bytes().iter() {
