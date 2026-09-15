@@ -21,6 +21,7 @@ Output: 27
 The solution is rather straightforward. Rather than using converting the number to a string and reversing the string which is a common approach. Instead, we use the arithmetic operation to reverse a number. Performing arithmetic operations are way less computationally expensive than working on strings. We then return the absolute value of the difference between the number and it's reverse.
 
 ### Pseudocode
+```
 function mirrorDistance(n):
 reverse = 0
 number  = n
@@ -29,7 +30,7 @@ while n > 0:
     n = n // 10
 
 return |number - reverse|
-
+```
 - **Time:** O(log n)
 - **Space:** O(1)
 
