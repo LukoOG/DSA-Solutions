@@ -7,7 +7,7 @@ class ListNode:
         self.next = next
 
 #helper functions
-def build_linked_list(values: list[int]) -> ListNode:
+def build_linked_list(values: list[int]) -> Optional[ListNode]:
     if not values:
         return None
     head = ListNode(values[0])
@@ -17,7 +17,7 @@ def build_linked_list(values: list[int]) -> ListNode:
         current = current.next
     return head
 
-def linked_list_to_array(node: ListNode) -> list[int]:
+def linked_list_to_array(node: Optional[ListNode]) -> list[int]:
     result = []
     while node:
         result.append(node.val)
@@ -33,7 +33,7 @@ class Solution:
         
         while end_node is not None and end_node.next is not None:
             end_node = end_node.next.next
-            middle_node = middle_node.next
+            middle_node = middle_node.next # type: ignore
         return middle_node
 
 if __name__ == "__main__":

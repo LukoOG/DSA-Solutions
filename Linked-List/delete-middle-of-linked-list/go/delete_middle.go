@@ -33,7 +33,20 @@ func linkedListToSlice(node *ListNode) []int {
 }
 
 func deleteMiddle(head *ListNode) *ListNode {
-	return buildLinkedList([]int{1})
+	if head == nil || head.Next == nil {
+		return nil
+	}
+	middle_node := head
+	end_node := head.Next.Next
+
+	for end_node != nil && end_node.Next != nil {
+		middle_node = middle_node.Next
+		end_node = end_node.Next.Next
+	}
+
+	middle_node.Next = middle_node.Next.Next
+
+	return head
 }
 
 func main() {
