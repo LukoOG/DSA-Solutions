@@ -17,12 +17,6 @@
   - [ ] Rust
   - [ ] README
 
-- [ ] Add solutions to two sum (Leetcode 13?)
-  - [ ] Python
-  - [ ] TypeScript
-  - [ ] Rust
-  - [ ] README
-
 - [ ] Add solutions to palindrom number (Leetcode 13?)
   - [ ] Python
   - [ ] TypeScript
@@ -35,4 +29,14 @@
   - [ ] Rust
   - [ ] README
   
+- [ ] Update READMEs for
+ - [ ] 1-d Running Sum
 
+
+- [ ] Solve Rotate list
+  - [ ] Rust
+  - [ ] Go
+  - [x] Python 
+  - [x] TypeScript
+
+- [ ] Solve Linked List Solutions in Rust
