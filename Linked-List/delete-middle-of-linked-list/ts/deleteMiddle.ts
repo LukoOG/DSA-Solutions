@@ -30,7 +30,20 @@ function linkedListToArray(node: ListNode | null): number[] {
 }
 
 function deleteMiddle(head: ListNode | null) {
-  return buildLinkedList([1]);
+  if(!head || !head.next){
+    return null
+  }
+
+  let middleNode = head
+  let endNode = head.next.next
+  while(endNode && endNode.next){
+    endNode = endNode.next.next;
+    middleNode = middleNode.next!
+  };
+  middleNode.next = middleNode.next?.next!;
+
+  return head
+
 }
 
 const testCases: number[][] = [

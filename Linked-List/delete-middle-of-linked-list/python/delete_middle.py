@@ -25,7 +25,17 @@ def linked_list_to_array(node: Optional[ListNode]) -> list[int]:
 class Solution:
     @staticmethod
     def deleteMiddle (head: Optional[ListNode]) -> Optional[ListNode]:
-        return build_linked_list([1])
+        if head is None or head.next is None:
+            return None
+        middle_node = head
+        end_node = head.next.next
+        while end_node is not None and end_node.next is not None:
+            middle_node = middle_node.next # type: ignore
+            end_node = end_node.next.next
+        # assert middle_node is not None and middle_node.next is not None
+        middle_node.next = middle_node.next.next # type: ignore
+            
+        return head
 
 if __name__ == "__main__":
     test_cases = [
