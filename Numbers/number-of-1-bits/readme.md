@@ -19,16 +19,49 @@ Reason: 11 in binary is 1011, which has three 1 bits
 
 ---
 
-## Approach
+## Approach — Three Iterations
 
-*// your explanation here*
+### Solution 1 — Division and Remainder (Rust)
+The most explicit approach. Repeatedly divide by 2 and check the remainder — a remainder of 1 means the current least significant bit is set. Count those remainders until `n` reaches zero.
+
+### Solution 2 — Bitwise Shift
+A cleaner version of the same idea using bit operations. `n & 1` checks the least significant bit directly, and `n >>= 1` shifts right to expose the next bit. Eliminates the division arithmetic of Solution 1.
+
+### Solution 3 — Brian Kernighan's Algorithm
+The most optimal approach. `n & (n - 1)` clears the lowest set bit in a single operation, so the loop only runs as many times as there are set bits rather than iterating through every bit position. For sparse bit patterns this is significantly faster.
 
 ### Pseudocode
+```
+// Solution 1 — Division
+function hammingWeight(n):
+    count = 0
+    while n > 0:
+        remainder = n % 2
+        if remainder == 1:
+            count++
+        n = n / 2
+    return count
+```
+```
+// Solution 2 — Bitwise Shift
+function hammingWeight(n):
+    count = 0
+    while n > 0:
+        count += n & 1
+        n >>= 1
+    return count
+```
+```
+// Solution 3 — Brian Kernighan
+function hammingWeight(n):
+    count = 0
+    while n != 0:
+        n = n & (n - 1)
+        count++
+    return count
+```
 
-// your pseudocode here
-
-
-- **Time:** O(1) — at most 32 bits
+- **Time:** O(1) — at most 32 iterations for Solutions 1 and 2; at most 32 for Solution 3 but proportional to set bits
 - **Space:** O(1)
 
 ---
