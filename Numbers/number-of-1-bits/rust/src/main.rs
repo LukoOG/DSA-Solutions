@@ -13,6 +13,7 @@ fn main() {
 }
 
 impl Solution {
+    #[allow(unused)]
     fn denary_to_binary(mut n: i64) -> i64 {
         let mut binary = 0i64;
         let mut place_value = 1i64;
