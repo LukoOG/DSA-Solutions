@@ -18,14 +18,30 @@ Output: [1, 3, 4, 1, 2, 6]
 
 ---
 
-## Approach
+## Approach — Offset Fast Pointer
 
-*// your explanation here*
+The standard slow/fast pointer technique lands slow exactly on the middle node. The insight here is to give the fast pointer a head start of two steps — initialising it at `head.next.next` instead of `head` — which shifts where slow naturally stops to one node *before* the middle. When the loop ends, the deletion is a single pointer reassignment with no second traversal and no previous pointer needed.
+
+An early return handles the single and two node edge cases before the fast pointer is initialised, since `head.next.next` would be unsafe to access otherwise.
 
 ### Pseudocode
+```
+function deleteMiddle(head):
+    if head is null or head.next is null:
+    return null
 
-// your pseudocode here
+    slow = head
+    fast = head.next.next
 
+    while fast is not null and fast.next is not null:
+        slow = slow.next
+        fast = fast.next.next
+
+    // slow is now one step before the middle
+    slow.next = slow.next.next
+
+    return head
+```
 
 - **Time:** O(n)
 - **Space:** O(1)
