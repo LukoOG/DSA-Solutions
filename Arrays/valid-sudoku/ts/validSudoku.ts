@@ -22,9 +22,9 @@ function _isValidSudoku(board: string[][]): boolean {
 
 //bitmask approach
 function isValidSudoku(board: string[][]): boolean {
-  let rows: number[] = Array(9).fill(0);
-  let cols: number[] = Array(9).fill(0);
-  let boxes: number[] = Array(9).fill(0);
+  let rows = new Uint16Array(9);
+  let cols = new Uint16Array(9);
+  let boxes = new Uint16Array(9);
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[0].length; j++) {
       let digit = board[i][j];
