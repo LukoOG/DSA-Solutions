@@ -10,22 +10,25 @@ function nextDestination(s: string): number {
   return s.length - 1;
 }
 
-function canJumpFn(dest: number, jump: number, end: number): boolean {
-    if(jump == dest){
-        return true
-    } else if (jump > dest){
-        if (jump == end){
-            return true
-        } else if (jump > end) {
-            return false
-        }
-    }
+function checkOverShoot(
+  s: string,
+  minJump: number,
+  maxJump: number,
+  validJumps: number[],
+) {
+  const last = s.length - 1;
+  if (s[last] !== "0") return false;
 
-    return false
+  let jump = last - minJump;
+  if (s[jump] !== "0") {
+    jump = last - maxJump;
+  }
+
+  return s[jump] === "0" && validJumps.includes(jump);
 }
 
 function canReach(s: string, minJump: number, maxJump: number): boolean {
-  //   for(let i = 0; i <= s.length - 1; i++){
+  let validJumps: number[] = [];
   let i = 0;
   while (i < s.length - 1) {
     const j = i + nextDestination(s.slice(i));
@@ -37,11 +40,14 @@ function canReach(s: string, minJump: number, maxJump: number): boolean {
       jump = Math.min(i + maxJump, s.length - 1);
     }
 
-    console.log(jump)
-    const canJump = canJumpFn(j, jump, s.length);
+    console.log(jump);
+    const canJump = jump >= j && jump <= s.length - 1;
 
     if (canJump && s[j] === "0") {
       i = j;
+      validJumps.push(i);
+    } else if (jump > s.length - 1) {
+      return checkOverShoot(s, minJump, maxJump, validJumps);
     } else {
       return false;
     }
