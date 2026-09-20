@@ -42,15 +42,15 @@ function solveQueries(nums: number[], queries: number[]): number[] {
     }
 
     console.log(j, indices);
-    console.log(indice_neighbors);
 
     indice_neighbors = indice_neighbors.map((k) =>
       Math.min(Math.abs(j - k), n - Math.abs(j - k)),
     );
-    if(indice_neighbors.length < 1){
-      ans.push(-1)
+    console.log(indice_neighbors);
+    if (indice_neighbors.length < 1) {
+      ans.push(-1);
     } else {
-      ans.push(Math.min(...indice_neighbors))
+      ans.push(Math.min(...indice_neighbors));
     }
   }
   return ans;
