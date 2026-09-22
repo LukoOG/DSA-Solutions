@@ -37,7 +37,30 @@ func rotateRight(head *ListNode, k int) *ListNode {
 		return head
 	}
 	length := 1
-	tail = head
+	tail := head
+
+	for tail.Next != nil {
+		tail = tail.Next
+		length += 1
+	}
+
+	i := k % length
+	if i == 0 {
+		return head
+	}
+	tail.Next = head
+
+	new_tail_post := length - i - 1
+
+	for new_tail_post > 0 {
+		head = head.Next
+		new_tail_post -= 1
+	}
+
+	new_head := head.Next
+	head.Next = nil
+
+	return new_head
 
 }
 
