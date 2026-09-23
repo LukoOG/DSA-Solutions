@@ -1,24 +1,34 @@
 export {}
 
 class MyStack {
+    private queue: number[]
     constructor() {
-        
+        this.queue = []
     }
 
     push(x: number): void {
-        
+        const size = this.queue.length
+        this.queue.push(x)
+        for(let i = 0; i < size; i++){
+            let left = this.queue[0]
+            this.queue = this.queue.slice(1)
+            this.queue.push(left)
+        }
+
     }
 
     pop(): number {
-        
+        let value = this.queue[0]
+        this.queue = this.queue.slice(1)
+        return value
     }
 
     top(): number {
-        
+        return this.queue[0]
     }
 
     empty(): boolean {
-        
+        return this.queue.length == 0   
     }
 }
 
