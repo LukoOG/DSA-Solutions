@@ -6,11 +6,23 @@ struct MyStack {
 }
 
 impl MyStack {
-    fn new() -> Self {}
-    fn push(&mut self, x: i32) {}
-    fn pop(&mut self) -> i32 {}
-    fn top(&mut self) -> i32 {}
-    fn empty(&self) -> bool {}
+    fn new() -> Self {
+        Self {
+            queue: VecDeque::new()
+        }
+    }
+    fn push(&mut self, x: i32) {
+        self.queue.push_front(x);
+    }
+    fn pop(&mut self) -> i32 {
+        self.queue.pop_front().unwrap()
+    }
+    fn top(&mut self) -> i32 {
+        *self.queue.get(0).unwrap()
+    }
+    fn empty(&self) -> bool {
+        self.queue.len() == 0
+    }
 }
 
 fn run_test(ops: &[&str], args: &[Option<i32>], expected: &[Option<i32>]) {
