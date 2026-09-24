@@ -20,7 +20,7 @@ fn main() {
 }
 
 impl Solution {
-    pub fn num_jewels_in_stones(jewels: String, stones: String) -> i32 {
+    pub fn _num_jewels_in_stones(jewels: String, stones: String) -> i32 {
         let jewels: HashSet<char> = jewels.chars().into_iter().collect();
 
         // stones.chars().fold(0, |mut acc, curr| {
@@ -30,5 +30,13 @@ impl Solution {
         //     return acc
         // })
         stones.chars().filter(|c| jewels.contains(c)).count() as i32
+    }
+
+    //Using Boolean array
+    pub fn num_jewels_in_stones(jewels: String, stones: String) -> i32 {
+        let mut j = vec![false; 128];
+        jewels.bytes().for_each(|byte| j[byte as usize] = true);
+        
+        stones.bytes().filter(|&byte| j[byte as usize]).count() as i32
     }
 }

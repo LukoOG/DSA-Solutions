@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func numJewelsInStones(jewels string, stones string) int {
+func _numJewelsInStones(jewels string, stones string) int {
 	j := make(map[rune]struct{})
 	for _, char := range jewels {
 		j[char] = struct{}{}
@@ -20,6 +20,22 @@ func numJewelsInStones(jewels string, stones string) int {
 	return count
 }
 
+// using boolean arrays
+func numJewelsInStones(jewels string, stones string) int {
+	var j [128]bool
+
+	for _, char := range jewels {
+		j[char] = true
+	}
+
+	count := 0
+	for _, char := range stones {
+		if j[char] {
+			count += 1
+		}
+	}
+	return count
+}
 func main() {
 	type testCase struct {
 		jewels, stones string
