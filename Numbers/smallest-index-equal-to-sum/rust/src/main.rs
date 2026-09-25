@@ -28,15 +28,10 @@ impl Solution {
         sum
     }
     pub fn smallest_index(nums: Vec<i32>) -> i32 {
-        let mut idx: Vec<i32> = Vec::new();
-
         for (i, &num) in nums.iter().enumerate() {
-            if i as i32 == Self::sum_of_digits(num) { idx.push(i as i32) }
+            if i as i32 == Self::sum_of_digits(num) { return i as i32 }
         }
 
-        match idx.iter().min() {
-            Some(&v) => v,
-            None => -1
-        }
+        -1
     }
 }

@@ -7,13 +7,11 @@ class Solution:
                 sum += d
                 num = int(num / 10)
             return sum
-        idx = []
+        
         for i in range(len(nums)):
             if i == sumOfDigits(nums[i]):
-                idx.append(i)
-        if len(idx) < 1:
-            return -1
-        return min(idx)
+                return i
+        return -1
 
 if __name__ == "__main__":
     test_cases = [

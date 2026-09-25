@@ -16,17 +16,12 @@ func sumOfDigits(num int) int {
 }
 
 func smallestIndex(nums []int) int {
-
-	idx := []int{}
-	for i, _ := range nums {
-		if i == sumOfDigits(nums[i]) {
-			idx = append(idx, i)
+	for i, num := range nums {
+		if i == sumOfDigits(num) {
+			return i
 		}
 	}
-	if len(idx) < 1 {
-		return -1
-	}
-	return idx[0]
+	return -1
 }
 
 func main() {

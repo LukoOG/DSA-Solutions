@@ -12,14 +12,13 @@ function smallestIndex(nums: number[]): number {
   }
   let idx: number[] = [];
   for (let i = 0; i < nums.length; i++) {
-    if (i == sumOfDigits(nums[i])) idx.push(i);
+    if (i == sumOfDigits(nums[i])) return i;
   }
-  if(idx.length < 1) return -1
-  return Math.min(...idx)
+  return -1;
 }
 
 const testCases: number[][] = [
-  [1, 3, 2],
+  [1, 3, 2], 
   [1, 10, 11],
   [0, 1, 2, 3, 4],
   [5, 4, 3, 2, 1],
