@@ -1,3 +1,6 @@
+use std::collections::HashSet;
+use std::cmp::max;
+
 struct Solution;
 
 fn main() {
@@ -20,6 +23,22 @@ fn main() {
 
 impl Solution {
     pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
-        0
+        let num_set: HashSet<i32> = nums.into_iter().collect();
+        let mut longest = 0;
+
+        for &num in &num_set {
+            if !num_set.contains(&(num-1)) {
+                let mut curr = num;
+                let mut curr_longest = 0;
+
+                while num_set.contains(&curr){
+                    curr +=1;
+                    curr_longest +=1
+                }
+
+                longest = max(longest, curr_longest)
+            }
+        }
+        longest
     }
 }

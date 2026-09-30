@@ -6,7 +6,30 @@ import (
 )
 
 func longestConsecutive(nums []int) int {
-	return 0
+	num_set := make(map[int]bool)
+	for _, num := range nums {
+		num_set[num] = true
+	}
+
+	longest := 0
+
+	for num, _ := range num_set {
+		if !num_set[num-1] {
+			curr := num
+			curr_longest := 0
+
+			for num_set[curr] {
+				curr++
+				curr_longest++
+			}
+
+			if curr_longest > longest {
+				longest = curr_longest
+			}
+		}
+	}
+
+	return longest
 }
 
 func main() {
