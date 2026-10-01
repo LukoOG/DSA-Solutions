@@ -11,7 +11,7 @@ func hammingWeight(n int) int {
 	var count int = 0
 	local := n
 	for local != 0 {
-		local = local & (local - 1)
+		local &= (local - 1)
 		count += 1
 	}
 	return count
