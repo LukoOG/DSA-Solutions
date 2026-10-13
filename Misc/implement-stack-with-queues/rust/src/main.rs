@@ -12,7 +12,12 @@ impl MyStack {
         }
     }
     fn push(&mut self, x: i32) {
-        self.queue.push_front(x);
+        self.queue.push_back(x);
+        let n = self.queue.len();
+        for _ in 0..n-1 {
+            let val = self.queue.pop_front().unwrap();
+            self.queue.push_back(val);
+        }
     }
     fn pop(&mut self) -> i32 {
         self.queue.pop_front().unwrap()

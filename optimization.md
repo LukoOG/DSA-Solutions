@@ -13,21 +13,21 @@ The second half of this problem reduces to counting the number of set bits (popc
 ### The Approaches
 
 **Brian Kernighan's Algorithm**
-
+```python
 count = 0
 while xor != 0:
-xor &= xor - 1
-count++
-
+    xor &= xor - 1
+    count++
+```
 Clears the lowest set bit on each iteration, so it only loops as many times as there are set bits. Elegant and efficient in most compiled languages.
 
 **Bitwise Shift**
-
+```python
 count = 0
 while xor > 0:
-count += xor & 1
-xor >>= 1
-
+    count += xor & 1
+    xor >>= 1
+```
 Checks each bit position one at a time. Always runs 32 iterations regardless of how many bits are set — less efficient than Kernighan for sparse bit patterns.
 
 **Built-in Popcount**
@@ -140,5 +140,143 @@ for (i, &b) in s.as_bytes().iter().enumerate() {
 > The same loop construct carries different costs in different languages. What looks like equivalent code can differ significantly in allocation behaviour, bounds checking, and compiler optimisation opportunities. Prefer index access in JS/Go for ASCII strings, iterator methods in Rust for compiler guarantees, and trust Python's `for...in` — it's already optimised at the C level.
 
 ---
+
+---
+
+## Case Study: Valid Parentheses — Option Type vs Explicit Empty Check
+
+**Problem:** [20. Valid Parentheses](https://leetcode.com/problems/valid-parentheses/)
+
+When popping from a stack and validating the result, most languages require two separate checks — one for an empty stack and one for a value mismatch. Rust's `Option` type collapses both into a single expression.
+
+---
+
+### The Problem
+
+When encountering a closing bracket, two things can go wrong:
+1. The stack is empty — no opener to match against
+2. The top of the stack doesn't match the expected closer
+
+In most languages these are handled as two separate conditions:
+
+**Python**
+```python
+if not stack or stack[-1] != expected:
+    return False
+stack.pop()
+```
+
+**Go**
+```go
+if len(stack) == 0 || stack[len(stack)-1] != c {
+    return false
+}
+stack = stack[:len(stack)-1]
+```
+
+Both require an explicit empty check before accessing the top element, otherwise you risk an index error or panic.
+
+---
+
+### The Rust Approach
+
+Rust's `Vec::pop()` returns `Option<T>` — `Some(value)` if the stack has an element, `None` if it's empty. This means both failure cases map to the same condition:
+
+```rust
+if stack.pop() != Some(c) {
+    return false
+}
+```
+
+- Empty stack → `pop()` returns `None` → `None != Some(c)` → `true` → return false ✅
+- Wrong closer → `pop()` returns `Some(wrong)` → `Some(wrong) != Some(c)` → `true` → return false ✅
+- Correct closer → `pop()` returns `Some(c)` → `Some(c) != Some(c)` → `false` → continue ✅
+
+The element is also consumed by `pop()` in the same operation — no separate pop step needed unlike Python and Go where the pop and the check are two lines.
+
+---
+
+### The Broader Lesson
+
+> Rust's `Option` type isn't just a null-safety mechanism — it's a tool for collapsing multiple failure conditions into a single comparison. Wherever you would write `if empty or mismatch` in another language, Rust lets you write `if pop() != Some(expected)`. Fewer branches means fewer bugs and cleaner intent.
+
+This pattern generalises to any situation where you pop from a stack and validate the result — linked list operations, expression parsers, backtracking algorithms, and more.
+
+---
+
+## Case Study: Minimum Add to Make Parentheses Valid — `.chars()` vs `.as_bytes()` in Rust
+
+**Problem:** [921. Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/)  
+**Also seen in:** [3498. Reverse Degree of a String](https://leetcode.com/problems/reverse-degree-of-a-string/)
+
+When iterating over a string in Rust, the default instinct is `.chars()`. For ASCII-only inputs, `.as_bytes()` is consistently faster and gives the compiler more to work with.
+
+---
+
+### The Difference
+
+**`.chars()`** — decodes the string as UTF-8 on every iteration, yielding `char` values (4 bytes each in Rust). UTF-8 decoding adds overhead since multi-byte characters must be handled even when the input is guaranteed to be single-byte ASCII.
+
+**`.as_bytes()`** — treats the string as a raw byte slice `&[u8]`, yielding `u8` values (1 byte each). No decoding step, no multi-byte handling, direct memory access.
+
+```rust
+// .chars() — UTF-8 decoded, char = 4 bytes
+for c in s.chars() {
+    if c == '(' { ... }
+}
+
+// .as_bytes() — raw bytes, u8 = 1 byte, no decoding
+for &c in s.as_bytes() {
+    match c {
+        b'(' => { ... }
+        _    => { ... }
+    }
+}
+```
+
+---
+
+### Why It's Faster
+
+- No UTF-8 boundary checking per character
+- `u8` is 1 byte vs `char` which is 4 bytes — better cache utilisation
+- The compiler can apply SIMD vectorisation more aggressively on a flat byte slice than on a decoded char iterator
+- Tighter loop body enables more aggressive inlining and unrolling
+
+---
+
+### When to Use It
+
+Safe to use whenever the input is guaranteed ASCII — which covers the majority of LeetCode string problems:
+- Parentheses strings `( )`
+- Lowercase letter strings `a-z`
+- Digit strings `0-9`
+- Mixed ASCII like `a-z`, `A-Z`, `0-9`
+
+**Do not use** when the input may contain non-ASCII Unicode characters — `.as_bytes()` would split multi-byte characters across iterations and produce incorrect results. Use `.chars()` in those cases.
+
+---
+
+### Pattern
+
+```rust
+// For ASCII-only inputs — prefer this
+for &b in s.as_bytes() {
+    match b {
+        b'a'..=b'z' => { ... }
+        b'0'..=b'9' => { ... }
+        b'('        => { ... }
+        _           => { ... }
+    }
+}
+```
+
+Byte literals use the `b'x'` syntax. Byte ranges use `b'a'..=b'z'`. Both are checked at compile time with no runtime cost.
+
+---
+
+### The Broader Lesson
+
+> In Rust, string iteration is not free. `.chars()` is the safe default for Unicode correctness but carries decoding overhead. For problems where the input is guaranteed ASCII — which is most competitive programming problems — `.as_bytes()` is the correct choice: faster, smaller memory footprint, and more compiler-friendly. Always match the abstraction level to what the input actually requires.
 
 *More case studies will be added as I encounter them.*
