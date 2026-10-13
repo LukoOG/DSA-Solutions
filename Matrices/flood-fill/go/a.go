@@ -53,18 +53,16 @@ func floodFill(image [][]int, sr int, sc int, color int) [][]int {
 
 	directions := []Point{{1, 0}, {-1, 0}, {0, -1}, {0, 1}}
 	for len(queue) > 0 {
-		levelLength := len(queue)
-		for i := 0; i < levelLength; i++ {
-			p := queue[0]
-			queue = queue[1:]
-			for _, n := range directions {
-				newRow := p.Row + n.Row
-				newCol := p.Col + n.Col
-				if 0 <= newRow && newRow < len(image) && 0 <= newCol && newCol < len(image[0]) {
-					if image[newRow][newCol] == original_color {
-						image[newRow][newCol] = color
-						queue = append(queue, Point{newRow, newCol})
-					}
+		p := queue[0]
+		queue[0] = Point{}
+		queue = queue[1:]
+		for _, n := range directions {
+			newRow := p.Row + n.Row
+			newCol := p.Col + n.Col
+			if 0 <= newRow && newRow < len(image) && 0 <= newCol && newCol < len(image[0]) {
+				if image[newRow][newCol] == original_color {
+					image[newRow][newCol] = color
+					queue = append(queue, Point{newRow, newCol})
 				}
 			}
 		}

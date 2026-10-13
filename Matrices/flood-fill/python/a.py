@@ -29,15 +29,13 @@ class Solution:
         directions = [(1,0), (-1,0), (0,1), (0,-1)]
             
         while queue:
-            level_length = len(queue)
-            for _ in range(level_length):
-                r, c = queue.popleft()
-                for dr, dc in directions:
-                    nr, nc = r + dr, c + dc
-                    if 0 <= nr < len(image) and 0 <= nc < len(image[0]):
-                        if image[nr][nc] == original_color:
-                            image[nr][nc] = color
-                            queue.append((nr, nc))
+            r, c = queue.popleft()
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < len(image) and 0 <= nc < len(image[0]):
+                    if image[nr][nc] == original_color:
+                        image[nr][nc] = color
+                        queue.append((nr, nc))
         return image
         
 import copy

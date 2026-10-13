@@ -18,7 +18,7 @@ Output: [[2,2,2],[2,2,0],[2,0,1]]
 
 ---
 
-## Approach — DFS Recursion
+## Approach 1 — DFS Recursion
 
 Capture the original color at `(sr, sc)` once. If it already equals the new color, return immediately — otherwise the recursion would loop infinitely since painted cells would still match.
 
@@ -45,8 +45,51 @@ function dfs(r, c):
 dfs(sr, sc)
 return image
 ```
-- **Time:** O(m × n) — every cell visited at most once
-- **Space:** O(m × n) — call stack depth in worst case
+- **Time:** O(m × n)
+- **Space:** O(m × n) — call stack depth worst case
+
+---
+
+## Approach 2 — BFS Iterative
+
+Use a queue of coordinates. Paint each cell to the new color immediately on enqueue — this prevents the same cell being added multiple times by different neighbours before it's processed. Dequeue each cell and check its four neighbours, enqueuing any that match the original color.
+
+The `directions` array keeps the four-directional logic clean and reusable — a pattern that appears in virtually every grid BFS problem.
+
+### Pseudocode
+```python
+function floodFill(image, sr, sc, color):
+original_color = image[sr][sc]
+if original_color == color:
+return image
+
+queue      = [(sr, sc)]
+image[sr][sc] = color
+directions = [(1,0), (-1,0), (0,1), (0,-1)]
+
+while queue is not empty:
+    r, c = dequeue()
+    for dr, dc in directions:
+        nr, nc = r+dr, c+dc
+        if in bounds and image[nr][nc] == original_color:
+            image[nr][nc] = color
+            enqueue(nr, nc)
+
+return image
+```
+- **Time:** O(m × n)
+- **Space:** O(m × n) — queue size worst case
+
+---
+
+## When to Use Which
+
+| | DFS | BFS |
+|---|---|---|
+| Code length | shorter | longer |
+| Space | call stack | explicit queue |
+| Level tracking | not possible | add `levelLength` snapshot |
+| Best for | simple fill, path exists | shortest path, level-order properties |
 
 ---
 
