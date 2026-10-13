@@ -1,5 +1,6 @@
 # Rust
 target/
+# binaries compiled straight into src/ with rustc
 main
 
 # Python
@@ -12,6 +13,7 @@ node_modules/
 # OS
 .DS_Store
 
-#readme
+# Working files
 README-DRAFT.md
+todo.md
 .vscode
