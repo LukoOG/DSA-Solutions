@@ -42,6 +42,32 @@ func maxDepth(root *TreeNode) int {
 	return 1 + max(maxDepth(root.Left), maxDepth(root.Right))
 }
 
+// /BFS Approach
+func bfs_maxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	depth := 0
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		levelLength := len(queue)
+		for i := 0; i < levelLength; i++ {
+			node := queue[0]
+			queue[0] = nil
+			queue = queue[1:]
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+		}
+		depth++
+	}
+	return depth
+}
+
 func main() {
 	testCases := [][]interface{}{
 		{3, 9, 20, nil, nil, 15, 7},

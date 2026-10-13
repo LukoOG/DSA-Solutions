@@ -1,4 +1,5 @@
 from typing import Optional
+from collections import deque
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -29,6 +30,20 @@ class Solution:
         if not root:
             return 0
         return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+    def bfs_maxDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        queue = deque([root])
+        depth = 0
+        while queue:
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            depth +=1
+        return depth
 
 if __name__ == "__main__":
     test_cases = [
@@ -42,5 +57,5 @@ if __name__ == "__main__":
     for values in test_cases:
         root = build_tree(values)
         print(f"Input:       {values}")
-        print(f"Output:      {Solution().maxDepth(root)}")
+        print(f"Output:      {Solution().bfs_maxDepth(root)}")
         print("-" * 35)
