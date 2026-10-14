@@ -20,7 +20,7 @@ func copyGrid(grid [][]byte) [][]byte {
 }
 
 // DFS recursive approach
-func _numIslands(grid [][]byte) int {
+func numIslandsDFS(grid [][]byte) int {
 	if len(grid) == 0 {
 		return 0
 	}
@@ -48,7 +48,7 @@ func _numIslands(grid [][]byte) int {
 }
 
 // BFS Approach
-func numIslands(grid [][]byte) int {
+func numIslandsBFS(grid [][]byte) int {
 	count := 0
 	directions := []Point{{1, 0}, {-1, 0}, {0, -1}, {0, 1}}
 	for r := 0; r < len(grid); r++ {
@@ -100,9 +100,11 @@ func main() {
 
 	for _, grid := range testCases {
 		original := copyGrid(grid)
-		result := numIslands(copyGrid(grid))
+		result1 := numIslandsDFS(copyGrid(grid))
+		result2 := numIslandsBFS(copyGrid(grid))
 		fmt.Printf("Input:       %v\n", original)
-		fmt.Printf("Output:      %d\n", result)
+		fmt.Printf("Output(DFS):      %d\n", result1)
+		fmt.Printf("Output(BFS):      %d\n", result2)
 		fmt.Println(strings.Repeat("-", 35))
 	}
 }

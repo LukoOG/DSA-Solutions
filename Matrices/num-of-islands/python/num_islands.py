@@ -1,7 +1,7 @@
 from collections import deque
 
 class Solution:
-    def numIslands(self, grid: list[list[str]]) -> int:
+    def numIslandsDFS(self, grid: list[list[str]]) -> int:
         def dfs(r, c):
             if r < 0 or r >= len(grid) or c < 0 or c >= len(grid[0]):
                 return
@@ -23,7 +23,7 @@ class Solution:
                     dfs(r, c)
         return count
     
-    def _numIslands(self, grid: list[list[str]]) -> int:
+    def numIslandsBFS(self, grid: list[list[str]]) -> int:
         count = 0
         directions = [(1,0), (-1,0), (0,1), (0,-1)]
         for r in range(len(grid)):
@@ -73,5 +73,6 @@ if __name__ == "__main__":
     for grid in test_cases:
         original = copy.deepcopy(grid)
         print(f"Input:       {original}")
-        print(f"Output:      {Solution().numIslands(copy.deepcopy(grid))}")
+        print(f"Output(DFS):      {Solution().numIslandsDFS(copy.deepcopy(grid))}")
+        print(f"Output(BFS):      {Solution().numIslandsBFS(copy.deepcopy(grid))}")
         print("-" * 35)

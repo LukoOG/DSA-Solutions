@@ -33,9 +33,10 @@ func orangesRotting(grid [][]int) int {
 
 	for r := 0; r < len(grid); r++ {
 		for c := 0; c < len(grid[0]); c++ {
-			if grid[r][c] == 2 {
+			switch grid[r][c] {
+			case 2:
 				rotten = append(rotten, Orange{r, c, 0})
-			} else if grid[r][c] == 1 {
+			case 1:
 				fresh++
 			}
 		}
