@@ -2,6 +2,8 @@
 
 A running document of interesting optimization differences I've discovered across Python, Rust, TypeScript, and Go while solving the same problems in multiple languages. The same algorithm doesn't always perform the same way across languages — compiler design, runtime overhead, and built-in hardware instruction mappings all play a role.
 
+Where a case study says "measured", the numbers are best-of-several runs on an Apple Silicon (arm64) Mac — Python 3.14 and Node 24. They show relative differences on one machine, not universal constants.
+
 ---
 
 ## Case Study: XOR of Array Equal to K — Popcount
@@ -28,18 +30,28 @@ while xor > 0:
     count += xor & 1
     xor >>= 1
 ```
-Checks each bit position one at a time. Always runs 32 iterations regardless of how many bits are set — less efficient than Kernighan for sparse bit patterns.
+Checks each bit position one at a time, so it loops once per bit up to the highest set bit — `5` (`101`) takes 3 iterations, but any value with bit 31 set takes 32, no matter how few bits are actually set. Kernighan only loops once per *set* bit, which wins for sparse bit patterns.
 
 **Built-in Popcount**
-Most languages expose a direct popcount function that maps to the `POPCNT` CPU instruction — a single hardware instruction that counts set bits in one clock cycle.
+Most languages expose a popcount built-in. Where the CPU supports it — `POPCNT` on x86-64, `CNT` on ARM — the compiler or runtime can turn it into a single hardware instruction. Where it can't, it falls back to a branchless bit trick that still runs in constant time.
 
 ---
 
 ### What I Found
 
-**Go** — Brian Kernighan's algorithm works well here. The Go compiler doesn't always auto-vectorize manual bit loops into `POPCNT`, so `math/bits.OnesCount()` is technically faster, but the difference is negligible for 32-bit integers.
+**Go** — Brian Kernighan's algorithm works well here. The Go compiler won't turn a hand-written bit loop into `POPCNT`, but `math/bits.OnesCount32()` is a compiler intrinsic that uses the hardware instruction when the CPU has it — so it's the faster and clearer choice, even if the difference is small at this problem's input sizes.
 
-**Python** — Brian Kernighan's is noticeably slower than `int.bit_count()`. Python's interpreter overhead makes every loop iteration expensive — each `&=` and `-` operation goes through the Python object model. `bit_count()` bypasses all of that and calls the C-level `POPCNT` instruction directly. For a 32-bit integer this is a significant relative speedup.
+**Python** — Brian Kernighan's is far slower than `int.bit_count()` (Python 3.10+). Python's interpreter overhead makes every loop iteration expensive — each `&=` and `-` operation goes through the Python object model. `bit_count()` does the whole count in C in a single call, skipping all of that per-iteration overhead.
+
+Measured over 100,000 random 32-bit integers:
+
+| Approach | Time |
+| --- | --- |
+| Bitwise shift loop | 154 ms |
+| Kernighan loop | 87 ms |
+| `int.bit_count()` | 2.8 ms |
+
+`bit_count()` is about 30× faster than Kernighan and 55× faster than the shift loop.
 
 ```python
 # Slower in Python
@@ -52,10 +64,16 @@ while xor != 0:
 count = xor.bit_count()
 ```
 
-**Rust** — the manual Kernighan loop is already fast since Rust compiles to native machine code, but `count_ones()` is still preferred. The Rust compiler maps it directly to the `POPCNT` instruction and it also signals intent more clearly to anyone reading the code. The compiler may or may not optimise a manual loop to `POPCNT` depending on context — `count_ones()` guarantees it.
+**Rust** — the manual Kernighan loop is already fast since Rust compiles to native machine code, but `count_ones()` is still preferred: it states intent, and it lets the compiler pick the best implementation for the target. That is **not** always `POPCNT`. Checking the generated assembly:
+
+- On ARM (e.g. Apple Silicon), `count_ones()` compiles to the `CNT` instruction.
+- On a baseline x86-64 target, it compiles to a branchless bit trick — constant time, but no `POPCNT` — because older x86-64 CPUs don't have the instruction.
+- On x86-64 with the feature enabled (`-C target-cpu=native` or `-C target-feature=+popcnt`), it becomes a single `POPCNT`.
+
+A manual loop may or may not be recognised and replaced by the optimiser; `count_ones()` always gets the best option available for the CPU you're building for.
 
 ```rust
-// Idiomatic and guaranteed POPCNT
+// Idiomatic; a single instruction wherever the target supports one
 let count = xor.count_ones();
 ```
 
@@ -65,7 +83,7 @@ let count = xor.count_ones();
 
 ### The Broader Lesson
 
-> The fastest algorithm on paper isn't always the fastest in practice. Runtime overhead, interpreter design, and compiler optimisation capabilities all affect which implementation wins. Always prefer built-ins when they map to a hardware instruction — they're faster, shorter, and more readable.
+> The fastest algorithm on paper isn't always the fastest in practice. Runtime overhead, interpreter design, and compiler optimisation capabilities all affect which implementation wins. Prefer built-ins: they can map to a hardware instruction where the target supports one, and they're shorter and clearer either way. In interpreted languages the gap is dramatic, because a built-in replaces a whole interpreted loop with one call into C.
 
 ---
 
@@ -104,16 +122,37 @@ function reverseDegree(s: string): number {
 }
 ```
 
+**Char codes by index (TypeScript — fastest)**
+```typescript
+function reverseDegree(s: string): number {
+    let sum = 0;
+    for (let i = 0; i < s.length; i++) {
+        sum += (i + 1) * (123 - s.charCodeAt(i))
+    }
+    return sum
+}
+```
+
 ---
 
 ### What I Found
 
-**TypeScript / JavaScript** — Two hidden costs in the unoptimized version:
+**TypeScript / JavaScript** — I expected two hidden costs in the unoptimized version, and measuring showed only one of them is real:
 
-- `let [sum, idx] = [0, 1]` — array destructuring allocates a temporary array on the heap before immediately discarding it. For a hot path this is unnecessary GC pressure. Two separate `let` declarations are cheaper.
-- `for (const ch of s)` — iterating a string with `for...of` in JavaScript allocates a **new string object** for each character on every iteration since strings are immutable objects. Direct index access with `s[i]` avoids that allocation entirely since it reads from the existing string buffer.
+- `let [sum, idx] = [0, 1]` — destructuring creates a temporary array, but V8's optimizing compiler removes it once the function is hot. Measured, it made **no difference**. Two plain `let`s are still simpler to read.
+- `for (const ch of s)` — this is the real cost. `for...of` runs the string iterator protocol on every step, handling surrogate pairs and producing a one-character string each time. (V8 caches one-character strings for ASCII, so it isn't allocating a new object per character — it's the per-step iterator work that adds up.)
+- `s[i].charCodeAt(0)` still builds that one-character string before reading its code. `s.charCodeAt(i)` reads the code unit straight from the string, which halves the time again.
 
-**Go** — Direct index access `s[i]` reads raw bytes from the underlying array without allocation, same reasoning as TypeScript. A `range` loop over a string in Go actually decodes UTF-8 runes on each iteration which adds overhead for ASCII-only problems — byte indexing is faster when you know the input is ASCII.
+Measured on a 1,000,000-character ASCII string:
+
+| Version | Time |
+| --- | --- |
+| Destructuring + `for...of` | 8.2 ms |
+| Plain `let` + `for...of` | 8.2 ms |
+| Index + `s[i].charCodeAt(0)` | 2.6 ms |
+| Index + `s.charCodeAt(i)` | 1.3 ms |
+
+**Go** — Direct index access `s[i]` reads a raw byte from the underlying array. A `range` loop over a string decodes UTF-8 runes on each iteration; Go has a fast path for ASCII, so the overhead is small, but byte indexing skips the decode entirely when you know the input is ASCII.
 
 ```go
 // Faster for ASCII — direct byte access, no rune decoding
@@ -131,13 +170,13 @@ for (i, &b) in s.as_bytes().iter().enumerate() {
 }
 ```
 
-**Python** — `for ch in s` is the idiomatic and fastest way to iterate a string in Python. Unlike JavaScript, Python's `for...in` on a string does not allocate new string objects per iteration in CPython — characters are returned as views into the existing string object. Enumerate is also zero-cost compared to a manual counter.
+**Python** — `for ch in s` is the idiomatic and fastest way to iterate a string in Python. Each step does produce a one-character string, but CPython keeps a cache of these for Latin-1 characters, so for ASCII input it hands back the same cached objects rather than allocating new ones. `enumerate()` is at least as fast as incrementing a counter by hand, and clearer.
 
 ---
 
 ### The Broader Lesson
 
-> The same loop construct carries different costs in different languages. What looks like equivalent code can differ significantly in allocation behaviour, bounds checking, and compiler optimisation opportunities. Prefer index access in JS/Go for ASCII strings, iterator methods in Rust for compiler guarantees, and trust Python's `for...in` — it's already optimised at the C level.
+> The same loop construct carries different costs in different languages, and the cost isn't always where you expect it — I guessed destructuring was slow and it wasn't; the iterator was. Measure before optimising. For ASCII strings: read char codes by index in JS, bytes by index in Go, iterator methods in Rust for compiler guarantees, and trust Python's `for...in` — it's already optimised at the C level.
 
 ---
 
@@ -209,7 +248,7 @@ This pattern generalises to any situation where you pop from a stack and validat
 **Problem:** [921. Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/)  
 **Also seen in:** [3498. Reverse Degree of a String](https://leetcode.com/problems/reverse-degree-of-a-string/)
 
-When iterating over a string in Rust, the default instinct is `.chars()`. For ASCII-only inputs, `.as_bytes()` is consistently faster and gives the compiler more to work with.
+When iterating over a string in Rust, the default instinct is `.chars()`. For ASCII-only inputs, `.as_bytes()` skips work you don't need and gives the compiler more to work with.
 
 ---
 
@@ -238,10 +277,12 @@ for &c in s.as_bytes() {
 
 ### Why It's Faster
 
-- No UTF-8 boundary checking per character
-- `u8` is 1 byte vs `char` which is 4 bytes — better cache utilisation
-- The compiler can apply SIMD vectorisation more aggressively on a flat byte slice than on a decoded char iterator
-- Tighter loop body enables more aggressive inlining and unrolling
+- No UTF-8 decoding per character — `.chars()` has to check each byte to see whether a character continues into the next ones
+- Each step compares a `u8` directly instead of first assembling a 4-byte `char` value
+- A plain byte-slice loop gives the compiler a better chance to vectorise with SIMD than a decoding iterator does
+- A tighter loop body enables more aggressive inlining and unrolling
+
+(The string's memory is the same either way — `.chars()` doesn't copy it — so the gain is less work per step, not better cache use.)
 
 ---
 
@@ -271,12 +312,12 @@ for &b in s.as_bytes() {
 }
 ```
 
-Byte literals use the `b'x'` syntax. Byte ranges use `b'a'..=b'z'`. Both are checked at compile time with no runtime cost.
+Byte literals use the `b'x'` syntax and byte ranges use `b'a'..=b'z'`. Both are compile-time constants, so each arm is a plain integer comparison.
 
 ---
 
 ### The Broader Lesson
 
-> In Rust, string iteration is not free. `.chars()` is the safe default for Unicode correctness but carries decoding overhead. For problems where the input is guaranteed ASCII — which is most competitive programming problems — `.as_bytes()` is the correct choice: faster, smaller memory footprint, and more compiler-friendly. Always match the abstraction level to what the input actually requires.
+> In Rust, string iteration is not free. `.chars()` is the safe default for Unicode correctness but carries decoding overhead. For problems where the input is guaranteed ASCII — which is most competitive programming problems — `.as_bytes()` is the better choice: less work per character and more compiler-friendly. Always match the abstraction level to what the input actually requires.
 
 *More case studies will be added as I encounter them.*
