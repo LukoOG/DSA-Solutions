@@ -12,8 +12,8 @@ function _reverseDegree(s: string): number{
 
 function reverseDegree(s: string): number{
     let sum = 0;
-    for(let i = 1; i <= s.length; i++){
-        sum += i * (123 - s[i-1].charCodeAt(0))
+    for(let i = 0; i < s.length; i++){
+        sum += (i+1) * (123 - s.charCodeAt(i))
     };
     return sum
 }
