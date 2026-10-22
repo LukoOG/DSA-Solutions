@@ -2,7 +2,7 @@ from collections import deque
 
 class Solution:
     #Recursive DFS Approach
-    def _floodFill(self, image: list[list[int]], sr: int, sc: int, color: int) -> list[list[int]]:
+    def floodFillDFS(self, image: list[list[int]], sr: int, sc: int, color: int) -> list[list[int]]:
         original_color = image[sr][sc]
         if original_color == color:
             return image
@@ -19,7 +19,7 @@ class Solution:
         return image
     
     #BFS Approach
-    def floodFill(self, image: list[list[int]], sr: int, sc: int, color: int) -> list[list[int]]:
+    def floodFillBFS(self, image: list[list[int]], sr: int, sc: int, color: int) -> list[list[int]]:
         original_color = image[sr][sc]
         if original_color == color:
             return image
@@ -50,8 +50,11 @@ if __name__ == "__main__":
     ]
 
     for image, sr, sc, color in test_cases:
-        original = copy.deepcopy(image)
-        result = Solution().floodFill(image, sr, sc, color)
-        print(f"Input:       image={original}, sr={sr}, sc={sc}, color={color}")
-        print(f"Output:      {result}")
+        original1 = copy.deepcopy(image)
+        original2 = copy.deepcopy(image)
+        result1 = Solution().floodFillDFS(image, sr, sc, color)
+        result2 = Solution().floodFillBFS(image, sr, sc, color)
+        print(f"Input:       image={original1}, sr={sr}, sc={sc}, color={color}")
+        print(f"Output(DFS):      {result1}")
+        print(f"Output(BFS):      {result2}")
         print("-" * 35)
